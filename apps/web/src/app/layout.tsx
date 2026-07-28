@@ -1,33 +1,25 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Auth0Provider } from "@auth0/nextjs-auth0/client";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import type { Metadata } from "next"
+import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "CityConnect",
-  description: "CityConnect citizen services platform",
-};
+  title: {
+    default: "CityConnect",
+    template: "%s | CityConnect",
+  },
+  description:
+    "A centralized citizen service request and communication platform for Caloocan City.",
+}
+
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode
+}>
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>
-        <Auth0Provider>{children}</Auth0Provider>
-      </body>
+      <body>{children}</body>
     </html>
-  );
+  )
 }
