@@ -1,309 +1,277 @@
-CityConnect Agent Guide
+# CityConnect Agent Guide
 
-This document gives future AI agents and contributors the context needed to work safely and consistently on CityConnect.
+> Required project context and operating rules for AI coding agents working on CityConnect.
 
-1. Project Overview
+---
 
-CityConnect is a centralized citizen-service and local government workflow platform intended for Caloocan City. It connects citizens, city employees, and administrators through one secure system for submitting, processing, tracking, and reporting public-service requests.
+## Purpose of This File
 
-The system is designed to replace fragmented communication through email, Messenger, paper records, and disconnected office workflows with a structured, auditable, role-based platform.
+This document explains the CityConnect project as a whole so that future AI agents can understand the product, architecture, approved stack, development priorities, and project rules before generating or modifying code.
 
-2. Primary Users
+Every AI agent must read this file together with:
 
-Citizens
+- `README.md`
+- `CONTRIBUTING.md`
+- the relevant GitHub issue
+- the current sprint requirements
+- existing code in the affected module
 
-Citizens can:
+Agents must not assume that unfinished applications, modules, integrations, or files already exist. Inspect the repository first.
 
-Sign in securely through Auth0.
+## Project Overview
 
-Manage their profile.
+**CityConnect** is a centralized citizen service request, communication, and case-management platform for Caloocan City.
 
-Submit and track service requests.
+It connects:
 
-Submit complaints.
+- citizens;
+- city employees;
+- department administrators;
+- system administrators.
 
-Schedule appointments.
+The platform is intended to replace fragmented workflows involving paper, email, spreadsheets, Messenger, and disconnected office processes with a secure, structured, auditable, and role-based system.
 
-Upload supporting documents.
+## Main User Roles
 
-Communicate with assigned city employees.
+### Citizen
 
-Receive email, push, in-app, and optional SMS notifications.
+Citizens should eventually be able to:
 
-View announcements and provide feedback.
+- authenticate through Auth0;
+- manage their profile;
+- submit and track service requests;
+- submit complaints and concerns;
+- schedule appointments;
+- upload supporting documents;
+- communicate with assigned employees;
+- receive notifications;
+- view announcements;
+- provide feedback.
 
-Employees
+### Employee
 
-Employees can:
+Employees should eventually be able to:
 
-View requests assigned to them or their department.
+- view assigned or department requests;
+- update request statuses;
+- add processing notes;
+- request additional information;
+- communicate with citizens;
+- communicate internally with employees;
+- manage appointments and complaints within their permissions;
+- receive work notifications;
+- access authorized reports.
 
-Update request status and processing notes.
+### Department Administrator
 
-Request additional citizen documents.
+Department administrators should eventually be able to:
 
-Communicate with citizens and other employees.
+- manage department employees;
+- assign and reassign cases;
+- manage department service categories;
+- monitor workloads and request progress;
+- access department reports;
+- review department-level audit activity.
 
-Manage appointments and complaints within their authority.
+### System Administrator
 
-Receive work notifications.
+System administrators should eventually be able to:
+
+- manage users, roles, and permissions;
+- manage departments and service categories;
+- configure system-wide settings;
+- review reports and dashboards;
+- review audit logs;
+- deactivate internal access;
+- manage application-level configuration without managing user passwords directly.
 
-Access limited reports based on permissions.
+## Approved Technology Stack
 
-Administrators
+Do not replace the approved technologies without explicit approval from the project owner.
 
-Administrators can:
+### Monorepo and Tooling
 
-Manage users, employees, departments, service categories, roles, and permissions.
-
-Assign and reassign work.
-
-Configure system settings and announcements.
-
-Review reports and operational dashboards.
-
-Review audit logs.
-
-Manage access without directly managing user passwords.
-
-3. Approved Technology Stack
-
-Do not replace technologies without explicit approval from the project owner.
-
-Monorepo and tooling
-
-pnpm workspaces
-
-Turborepo
-
-TypeScript
-
-Prettier
-
-GitHub and GitHub Projects
-
-Frontend
-
-Next.js with App Router
-
-TypeScript
-
-Tailwind CSS
-
-shadcn/ui using Base UI
-
-TanStack Query
-
-React Hook Form
-
-Zod
-
-Recharts
-
-Socket.IO Client
-
-Auth0 Next.js SDK
-
-Backend
-
-NestJS
-
-TypeScript
-
-REST API
-
-Swagger/OpenAPI
-
-Socket.IO through NestJS WebSocket Gateway
-
-Class Validator and Class Transformer
-
-Authentication and authorization
-
-Auth0 Universal Login
-
-OAuth 2.0 and OpenID Connect
-
-RS256 JWT access tokens
-
-JWKS validation in NestJS
-
-PostgreSQL-managed role-based access control
-
-Auth0 owns passwords, login, MFA, and identity sessions. PostgreSQL stores the internal CityConnect user, role, permission, department, profile, and business records.
-
-Database
-
-PostgreSQL 18 during local development
-
-Prisma 7
-
-PostgreSQL UUID identifiers
-
-pgvector for later AI/RAG features
-
-Background processing and cache
-
-Redis
-
-BullMQ
-
-Separate NestJS worker application
-
-Storage and integrations
-
-Amazon S3 or Cloudflare R2 in production
-
-MinIO as the local S3-compatible development service
-
-Resend for email
-
-Firebase Cloud Messaging for push notifications
-
-Semaphore or another approved provider for SMS
-
-Tesseract.js for initial OCR
-
-OpenAI API and pgvector for later RAG functionality
-
-Testing and monitoring
-
-Jest
-
-Supertest
-
-Playwright
-
-Sentry
-
-Uptime monitoring
-
-Deployment direction
-
-Vercel for the Next.js frontend
-
-Railway or Render for the initial NestJS deployment
-
-Managed PostgreSQL and Redis
-
-S3 or Cloudflare R2 for documents
-
-AWS-compatible architecture for future scaling
-
-4. Repository Structure
-
+| Technology | Purpose |
+|---|---|
+| pnpm Workspaces | Workspace and dependency management |
+| Turborepo | Monorepo task execution and caching |
+| TypeScript | Shared type-safe development language |
+| Prettier | Formatting |
+| GitHub | Source control and collaboration |
+| GitHub Projects | Scrum board, sprint, backlog, and roadmap tracking |
+
+### Frontend
+
+| Technology | Purpose |
+|---|---|
+| Next.js App Router | Main web application |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling |
+| shadcn/ui with Base UI | UI components |
+| TanStack Query | Server-state management |
+| React Hook Form | Form handling |
+| Zod | Validation |
+| Recharts | Reports and dashboards |
+| Socket.IO Client | Real-time communication |
+| Auth0 Next.js SDK | Authentication integration |
+
+### Backend
+
+| Technology | Purpose |
+|---|---|
+| NestJS | REST API and business logic |
+| TypeScript | Type safety |
+| Swagger/OpenAPI | API documentation |
+| Socket.IO Gateway | Real-time events and messaging |
+| Class Validator | Request validation |
+| BullMQ | Background jobs |
+| Redis | Queue storage and caching |
+
+### Authentication and Authorization
+
+- Auth0 Universal Login
+- OAuth 2.0
+- OpenID Connect
+- RS256 JWT access tokens
+- JWKS verification in NestJS
+- PostgreSQL-managed role-based access control
+
+Auth0 owns:
+
+- credentials;
+- password reset;
+- login;
+- MFA;
+- authentication sessions;
+- identity-provider integration.
+
+PostgreSQL owns:
+
+- internal users;
+- citizen and employee profiles;
+- departments;
+- roles;
+- permissions;
+- business data;
+- account activation state;
+- audit logs.
+
+Do not store passwords or password hashes in PostgreSQL.
+
+### Database and Storage
+
+| Technology | Purpose |
+|---|---|
+| PostgreSQL | Primary relational database |
+| Prisma | Schema, migrations, and typed database access |
+| UUID | Primary identifiers |
+| pgvector | Future semantic search and RAG |
+| Amazon S3 or Cloudflare R2 | Production document storage |
+| MinIO | Local S3-compatible development storage |
+
+### Planned Integrations
+
+- Resend for email
+- Firebase Cloud Messaging for push notifications
+- Semaphore or another approved SMS provider
+- Tesseract.js for OCR
+- OpenAI API for future AI-assisted features
+- Sentry for monitoring
+
+## Architecture Direction
+
+CityConnect begins as a **modular monolith**, not microservices.
+
+Do not create independent services unless the project owner explicitly approves an architectural change.
+
+The initial applications are:
+
+```text
+apps/web       Next.js frontend
+apps/api       NestJS REST API and WebSocket gateway
+apps/worker    NestJS BullMQ worker
+```
+
+The first complete vertical slice must be:
+
+```text
+Citizen signs in
+→ Internal user is synchronized
+→ Citizen submits a service request
+→ Request is stored in PostgreSQL
+→ Employee receives or is assigned the request
+→ Employee updates its status
+→ Citizen sees the updated status
+→ Notification is queued
+→ Audit log is recorded
+```
+
+Do not prioritize AI, OCR, advanced analytics, or microservices before this workflow is stable.
+
+## Repository Structure
+
+```text
 cityconnect/
 ├── apps/
-│   ├── web/                 # Next.js citizen, employee, admin, and public UI
-│   ├── api/                 # NestJS REST API and WebSocket gateway
-│   └── worker/              # NestJS BullMQ processors
+│   ├── web/                  Next.js frontend
+│   ├── api/                  NestJS API and WebSocket gateway
+│   └── worker/               NestJS background worker
+│
 ├── packages/
-│   ├── database/            # Prisma schema, migrations, generated client, seeds
-│   ├── shared-types/        # Shared TypeScript types when required
-│   ├── validation/          # Shared Zod schemas when appropriate
-│   ├── config/              # Shared non-secret configuration
-│   ├── eslint-config/       # Shared lint configuration
-│   └── typescript-config/   # Shared TypeScript configuration
-├── infrastructure/
-│   ├── docker/
-│   ├── deployment/
-│   ├── monitoring/
-│   └── scripts/
-├── docs/
-│   ├── architecture/
-│   ├── api/
-│   ├── database/
-│   ├── development/
-│   ├── requirements/
-│   ├── security/
-│   └── testing/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   ├── workflows/
-│   ├── CODEOWNERS
-│   └── pull_request_template.md
-├── docker-compose.yml
-├── pnpm-workspace.yaml
-├── turbo.json
-├── package.json
-├── README.md
+│   ├── database/             Prisma schema, migrations, client, and seeds
+│   ├── shared-types/         Shared TypeScript types
+│   ├── validation/           Shared validation schemas
+│   ├── config/               Shared non-secret configuration
+│   ├── eslint-config/        Shared lint rules
+│   └── typescript-config/    Shared TypeScript configuration
+│
+├── infrastructure/           Docker, deployment, monitoring, and scripts
+├── docs/                     Architecture, API, database, security, and testing docs
+├── .github/                  Workflows, templates, and CODEOWNERS
+│
+├── AGENT.md
 ├── CONTRIBUTING.md
-└── AGENT.md
+├── README.md
+├── docker-compose.yml
+├── package.json
+├── pnpm-workspace.yaml
+└── turbo.json
+```
 
-There must be only one root pnpm-workspace.yaml and one root pnpm-lock.yaml.
+There must be only one root `pnpm-lock.yaml` and one root `pnpm-workspace.yaml`.
 
-5. Current Development Direction
+## Expected Backend Modules
 
-CityConnect begins as a modular monolith, not microservices.
-
-The first complete functional vertical slice is:
-
-Citizen signs in
-→ internal user is synchronized
-→ citizen submits a service request
-→ request is stored in PostgreSQL
-→ employee receives or is assigned the request
-→ employee updates status
-→ citizen sees the update
-→ notification is queued
-→ audit log is recorded
-
-Do not prioritize AI, OCR, advanced analytics, or large-scale infrastructure before this workflow is stable.
-
-6. Initial Domain Modules
-
-Expected backend modules include:
-
+```text
 health
-
 auth
-
 users
-
 citizens
-
 employees
-
 departments
-
 roles
-
 permissions
-
 service-categories
-
 service-requests
-
 request-history
-
 complaints
-
 appointments
-
 documents
-
 conversations
-
 messages
-
 notifications
-
 announcements
-
 feedback
-
 reports
-
 audit-logs
+ai-assistant       later phase only
+```
 
-ai-assistant, later only
+## Database Direction
 
-7. Initial Database Direction
+The initial internal user model should link an Auth0 identity to a CityConnect user.
 
-The project currently starts with the internal user model and migration foundation.
-
-Example core user fields:
-
+```prisma
 model User {
   id          String   @id @default(uuid()) @db.Uuid
   auth0UserId String   @unique
@@ -316,311 +284,186 @@ model User {
 
   @@map("users")
 }
+```
 
 Planned major entities include:
 
-User
+- User
+- CitizenProfile
+- EmployeeProfile
+- Department
+- Role
+- Permission
+- RolePermission
+- UserRole
+- ServiceCategory
+- ServiceRequest
+- RequestAssignment
+- RequestStatusHistory
+- Complaint
+- Appointment
+- Document
+- Conversation
+- ConversationMember
+- Message
+- Notification
+- DeviceToken
+- Announcement
+- Feedback
+- AuditLog
+- Report
+- AiKnowledgeDocument
+- AiDocumentChunk
+
+Agents must not generate every entity at once unless the issue explicitly requires it.
+
+## Security Rules
+
+Every agent-generated change must follow these rules:
+
+- Never commit credentials, secrets, tokens, private keys, or production URLs.
+- Never expose Auth0 Client Secret to browser code.
+- Never store passwords in PostgreSQL.
+- Enforce authorization in the backend, not only in the frontend.
+- Validate all external input.
+- Use allowlists for uploaded file types and size limits.
+- Do not trust user-provided filenames or MIME types.
+- Do not log access tokens or sensitive citizen data.
+- Record meaningful administrative and workflow actions in audit logs.
+- Use least-privilege permissions.
+- Avoid returning internal stack traces to clients.
+- Do not manually modify `_prisma_migrations`.
+
+## Coding Rules
+
+### General
+
+- Use TypeScript strict mode.
+- Avoid `any` unless clearly justified.
+- Prefer small, focused functions.
+- Use descriptive names.
+- Preserve the existing architecture and naming conventions.
+- Reuse shared types and validation where appropriate.
+- Add comments only when they explain non-obvious decisions.
+- Do not add dependencies when the current stack already solves the problem.
+
+### Frontend
+
+- Use the Next.js App Router.
+- Prefer Server Components when interactivity is not required.
+- Use Client Components only where necessary.
+- Keep API requests in service or feature layers.
+- Use TanStack Query for server-state operations.
+- Use React Hook Form and Zod for forms.
+- Use shadcn/ui components before building duplicate primitives.
+- Keep citizen, employee, and administrator portals in the same Next.js application.
+
+### Backend
+
+- Keep modules domain-focused.
+- Validate DTOs.
+- Keep controllers thin.
+- Place business logic in services.
+- Keep database operations testable.
+- Enforce roles and permissions through guards or centralized authorization logic.
+- Document REST endpoints through Swagger.
+- Use queues for slow or retryable tasks.
+
+### Database
+
+- Use Prisma migrations for schema changes.
+- Use UUID identifiers.
+- Keep migration names descriptive.
+- Review generated SQL before committing.
+- Do not use `prisma db push` as a substitute for migrations in shared development workflows.
+
+## Git and Scrum Rules
+
+All meaningful work should have:
+
+- a GitHub issue;
+- acceptance criteria;
+- an assignee;
+- a priority;
+- a sprint assignment;
+- a branch from `develop`;
+- a pull request into `develop`.
+
+Branch examples:
 
-CitizenProfile
-
-EmployeeProfile
-
-Department
-
-Role
-
-Permission
-
-RolePermission
-
-UserRole
-
-ServiceCategory
-
-ServiceRequest
-
-RequestAssignment
-
-RequestStatusHistory
-
-Complaint
-
-Appointment
-
-Document
-
-Conversation
-
-ConversationMember
-
-Message
-
-Notification
-
-DeviceToken
-
-Announcement
-
-Feedback
-
-AuditLog
-
-Report
-
-AiKnowledgeDocument, later
-
-AiDocumentChunk, later
-
-Never store Auth0 passwords, password hashes, client secrets, private keys, or access tokens in ordinary database columns.
-
-8. Auth0 Architecture
-
-Two Auth0 resources are required:
-
-CityConnect Web
-
-Type: Regular Web Application
-
-Local callback: http://localhost:3000/auth/callback
-
-Local logout URL: http://localhost:3000
-
-Local web origin: http://localhost:3000
-
-CityConnect API
-
-Identifier/audience: https://api.cityconnect.local
-
-Signing algorithm: RS256
-
-Authentication proves identity. Authorization remains a CityConnect responsibility through PostgreSQL roles and permissions.
-
-The backend should eventually expose:
-
-GET /api/v1/users/me
-
-Expected flow:
-
-Next.js obtains Auth0 access token
-→ sends Bearer token
-→ NestJS validates JWT using Auth0 JWKS
-→ reads the Auth0 `sub`
-→ finds or creates the internal user
-→ loads roles and permissions
-→ returns the authorized internal profile
-
-9. Environment and Secrets
-
-Never commit real .env files.
-
-Expected local files may include:
-
-apps/web/.env.local
-
-apps/api/.env
-
-apps/worker/.env
-
-packages/database/.env
-
-Commit only sanitized .env.example files.
-
-Important variables include:
-
-DATABASE_URL=
-AUTH0_SECRET=
-APP_BASE_URL=http://localhost:3000
-AUTH0_DOMAIN=
-AUTH0_CLIENT_ID=
-AUTH0_CLIENT_SECRET=
-AUTH0_AUDIENCE=https://api.cityconnect.local
-REDIS_URL=redis://localhost:6379
-S3_ENDPOINT=http://localhost:9000
-S3_BUCKET=cityconnect-documents
-S3_ACCESS_KEY_ID=
-S3_SECRET_ACCESS_KEY=
-
-10. Local Database Notes
-
-The current local PostgreSQL connection is expected to use:
-
-Host: localhost
-Port: 5432
-Database: cityconnect
-User: postgres
-
-The password is local and must not be committed.
-
-Prisma 7 uses prisma.config.ts to read DATABASE_URL.
-
-Typical commands from the repository root:
-
-pnpm --filter @cityconnect/database exec prisma validate
-pnpm --filter @cityconnect/database exec prisma migrate dev --name migration_name
-pnpm --filter @cityconnect/database exec prisma generate
-pnpm --filter @cityconnect/database exec prisma studio
-
-Do not edit _prisma_migrations manually.
-
-11. Development Workflow
-
-Permanent branches:
-
-main: stable, approved, presentation-ready
-
-develop: integration branch
-
-Temporary branches:
-
-feature/*
-
-fix/*
-
-docs/*
-
-test/*
-
-chore/*
-
-refactor/*
-
-hotfix/*
-
-Examples:
-
-feature/auth0-integration
+```text
+feature/auth0-user-sync
 feature/service-request-submission
-chore/project-foundation
-docs/system-architecture
-fix/request-status-validation
+fix/prisma-migration-path
+docs/local-development
+chore/configure-ci
+```
 
-Do not push feature work directly to main.
+Commit examples:
 
-12. Commit Convention
+```text
+feat(auth): add Auth0 JWT guard
+feat(requests): add citizen request endpoint
+fix(database): correct Prisma connection configuration
+docs(readme): update local setup instructions
+```
 
-Use Conventional Commits:
+## Agent Workflow
 
-feat(auth): integrate Auth0 login
-feat(requests): create service request endpoint
-fix(database): correct migration relation
-refactor(api): simplify request assignment logic
-test(auth): add unauthorized API test
-docs(setup): update local PostgreSQL instructions
-chore(deps): update workspace dependencies
+Before changing code:
 
-13. Sprint and Project Workflow
+1. Read the user request and linked issue.
+2. Inspect the repository and affected files.
+3. Confirm what currently exists.
+4. Identify dependencies and security implications.
+5. Make the smallest complete change.
+6. Run the relevant checks.
+7. Update documentation when behavior or setup changes.
+8. Clearly report what changed, what was tested, and what remains incomplete.
 
-GitHub Projects uses an Iteration field named Sprint.
+## Agent Prohibitions
 
-Recommended status flow:
+Agents must not:
 
-Backlog
-→ Ready
-→ In Progress
-→ In Review
-→ Testing
-→ Done
+- invent completed features;
+- assume applications or modules exist without checking;
+- replace Auth0, Prisma, PostgreSQL, Next.js, NestJS, pnpm, or Turborepo without approval;
+- create microservices prematurely;
+- implement AI before the core workflow is stable;
+- expose secrets;
+- disable authentication or authorization to make a feature work;
+- delete migrations or production data without explicit approval;
+- silently change public API contracts;
+- mark work complete when tests or required setup still fail.
 
-Use Blocked only when progress depends on an unresolved external issue.
+## Current Project Priority
 
-Initial sprint direction:
+The immediate priority is the foundation and first service-request workflow.
 
-Sprint 0 — Foundation
+```text
+1. Complete Auth0 login and callback
+2. Initialize and configure the NestJS API
+3. Validate Auth0 access tokens in NestJS
+4. Synchronize authenticated users to PostgreSQL
+5. Implement roles and permissions
+6. Build citizen service-request submission
+7. Build employee request processing
+8. Add notifications and audit logging
+```
 
-Sprint 1 — Authentication and User Foundation
+## Definition of Done for Agent Work
 
-Sprint 2 — Service Request MVP
+A change is complete only when applicable requirements are satisfied:
 
-Sprint 3 — Employee Workflow
-
-Sprint 0 covers repository, frontend, backend, database, authentication setup, documentation, and project workflow—not complete business features.
-
-14. Definition of Done
-
-A task is not done merely because code was written. It must satisfy all applicable conditions:
-
-Acceptance criteria are met.
-
-Code builds and type-checks.
-
-Linting passes.
-
-Tests are added or updated when appropriate.
-
-Sensitive values are not committed.
-
-Authorization is enforced server-side.
-
-Database changes include a migration.
-
-API behavior is documented when changed.
-
-UI changes are responsive and accessible.
-
-The pull request is reviewed.
-
-The feature is manually verified.
-
-15. Security Rules for Agents
-
-Future agents must:
-
-Never expose or invent secrets.
-
-Never store Auth0 passwords in PostgreSQL.
-
-Never rely only on frontend role checks.
-
-Enforce permissions in NestJS guards and service logic.
-
-Validate all external input.
-
-Use signed or presigned URLs for private documents.
-
-Validate file extension, MIME type, size, and ownership.
-
-Record sensitive administrative and workflow actions in audit logs.
-
-Avoid logging tokens, secrets, personal documents, or unnecessary PII.
-
-Follow least privilege.
-
-Treat citizen data as sensitive government-facing information.
-
-16. Rules for Future AI Agents
-
-Before changing code, an agent should:
-
-Inspect the actual repository and current branch.
-
-Read this file, README.md, and CONTRIBUTING.md.
-
-Check relevant package scripts and dependency versions.
-
-Avoid assuming files or modules exist.
-
-Preserve the approved stack unless explicitly instructed otherwise.
-
-Prefer small, reviewable changes.
-
-State any missing information instead of fabricating it.
-
-Update documentation when architecture or setup changes.
-
-Never overwrite working user code without explaining the impact.
-
-Do not introduce microservices, Supabase Auth, Firebase Auth, or a second ORM without explicit approval.
-
-17. Current Priority
-
-The immediate priority is to finish the repository foundation and then implement secure authentication-to-database synchronization.
-
-The next major technical milestone is:
-
-Auth0 login works
-→ NestJS validates the access token
-→ PostgreSQL creates or retrieves the internal user
-→ roles and permissions are loaded
-→ `/api/v1/users/me` returns the authorized profile
-
-This document should be updated whenever the approved architecture, stack, repository layout, authentication strategy, or primary workflow changes.
+- [ ] Acceptance criteria are met
+- [ ] Code follows the approved architecture
+- [ ] Build succeeds
+- [ ] Type checking succeeds
+- [ ] Linting succeeds
+- [ ] Relevant tests pass
+- [ ] Authorization is enforced
+- [ ] Validation is present
+- [ ] No secrets are committed
+- [ ] Database changes include migrations
+- [ ] Documentation is updated
+- [ ] Remaining limitations are stated honestly
