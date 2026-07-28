@@ -1,414 +1,379 @@
-CityConnect
+# CityConnect
 
-CityConnect is a centralized citizen-service and local government workflow platform for Caloocan City. It provides citizens, city employees, and administrators with one secure system for submitting, processing, tracking, communicating about, and reporting public-service concerns and requests.
+> A centralized citizen service request, communication, and case-management platform for Caloocan City.
 
-Project Goals
+[![Status](https://img.shields.io/badge/status-in%20development-orange)](#project-status)
+[![Frontend](https://img.shields.io/badge/frontend-Next.js-black)](#technology-stack)
+[![Backend](https://img.shields.io/badge/backend-NestJS-e0234e)](#technology-stack)
+[![Database](https://img.shields.io/badge/database-PostgreSQL-336791)](#technology-stack)
+[![Auth](https://img.shields.io/badge/auth-Auth0-eb5424)](#technology-stack)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-CityConnect aims to:
+---
 
-Improve communication between citizens and city offices.
+## Table of Contents
 
-Replace fragmented email, Messenger, paper, and spreadsheet workflows.
+- [About the Project](#about-the-project)
+- [Main Users](#main-users)
+- [Core Features](#core-features)
+- [Technology Stack](#technology-stack)
+- [Repository Structure](#repository-structure)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Database Setup](#database-setup)
+- [Available Commands](#available-commands)
+- [Development Workflow](#development-workflow)
+- [Project Status](#project-status)
+- [Contributing](#contributing)
+- [License](#license)
 
-Let citizens track requests and receive status updates.
+---
 
-Give employees a structured workspace for assigned cases.
+## About the Project
 
-Give administrators visibility into operations, performance, and audit activity.
+**CityConnect** is a secure digital platform designed to improve communication and service delivery between citizens and the local government of Caloocan City.
 
-Protect citizen data through secure authentication, authorization, validation, and audit logging.
+The platform provides one organized system for:
 
-Main User Portals
+- submitting and tracking citizen requests;
+- managing complaints and concerns;
+- assigning work to departments and employees;
+- communicating with citizens and other employees;
+- managing appointments and supporting documents;
+- sending notifications and status updates;
+- generating administrative reports and audit records.
 
-Citizen Portal
+The project aims to replace fragmented workflows involving paper records, email, spreadsheets, Messenger, and disconnected office processes.
 
-Citizens can submit service requests and complaints, schedule appointments, upload documents, communicate with employees, receive notifications, and track progress.
+## Main Users
 
-Employee Portal
+### Citizens
 
-Employees can work on assigned requests, update statuses, request additional information, manage appointments, communicate with citizens or colleagues, and access authorized operational information.
+Citizens can submit requests, upload documents, schedule appointments, communicate with employees, and track the progress of their concerns.
 
-Administrator Portal
+### City Employees
 
-Administrators can manage users, departments, service categories, roles, permissions, assignments, reports, announcements, settings, and audit logs.
+Employees can receive assigned cases, update request statuses, request additional information, communicate with citizens, and coordinate with other employees.
 
-Approved Technology Stack
+### Department Administrators
 
-Frontend
+Department administrators can manage department personnel, assignments, service categories, workloads, and department reports.
 
-Next.js
+### System Administrators
 
-TypeScript
+System administrators can manage users, roles, permissions, departments, system settings, reports, and audit logs.
 
-Tailwind CSS
+## Core Features
 
-shadcn/ui with Base UI
+- Citizen service request submission
+- Complaint and concern tracking
+- Department assignment and routing
+- Citizen-to-employee communication
+- Internal employee communication
+- Real-time status updates
+- Email, push, in-app, and optional SMS notifications
+- File and image attachments
+- Appointment scheduling
+- Administrative dashboards
+- Reports and analytics
+- Role-based access control
+- Audit logging
+- Future OCR and AI-assisted document search
 
-TanStack Query
+## Technology Stack
 
-React Hook Form
+### Frontend
 
-Zod
+| Technology | Purpose |
+|---|---|
+| Next.js | Main web application and routing |
+| TypeScript | Type-safe frontend development |
+| Tailwind CSS | Styling and responsive design |
+| shadcn/ui with Base UI | Reusable interface components |
+| TanStack Query | API data fetching and server-state management |
+| React Hook Form | Form management |
+| Zod | Frontend validation |
+| Recharts | Dashboards and reports |
+| Socket.IO Client | Real-time communication |
+| Auth0 Next.js SDK | Authentication integration |
 
-Recharts
+### Backend
 
-Socket.IO Client
+| Technology | Purpose |
+|---|---|
+| NestJS | Backend application framework |
+| TypeScript | Type-safe backend development |
+| REST API | Main client-server communication |
+| Swagger/OpenAPI | API documentation |
+| Socket.IO Gateway | Real-time messaging and updates |
+| Class Validator | Request validation |
+| BullMQ | Background job processing |
 
-Auth0 Next.js SDK
+### Authentication and Authorization
 
-Backend
+- Auth0 Universal Login
+- OAuth 2.0
+- OpenID Connect
+- RS256 JWT access tokens
+- JWKS token verification
+- PostgreSQL-managed role-based access control
 
-NestJS
+### Database and Infrastructure
 
-TypeScript
+| Technology | Purpose |
+|---|---|
+| PostgreSQL | Primary relational database |
+| Prisma | ORM, migrations, and type-safe database access |
+| pgvector | Future semantic search and RAG support |
+| Redis | Caching and queue storage |
+| BullMQ | Background task queues |
+| Amazon S3 or Cloudflare R2 | Production document storage |
+| MinIO | Local S3-compatible storage |
+| Docker | Local infrastructure and containerization |
+| Turborepo | Monorepo task orchestration |
+| pnpm Workspaces | Dependency and workspace management |
 
-REST API
+### Planned Integrations
 
-Swagger/OpenAPI
+- Resend for email notifications
+- Firebase Cloud Messaging for push notifications
+- Semaphore or another approved SMS provider
+- Tesseract.js for OCR
+- OpenAI API for future AI-assisted features
+- Sentry for monitoring and error tracking
 
-Socket.IO WebSocket Gateway
+## Repository Structure
 
-Authentication and authorization
-
-Auth0 Universal Login
-
-OAuth 2.0 and OpenID Connect
-
-RS256 JWT access tokens
-
-JWKS validation
-
-PostgreSQL-managed role-based access control
-
-Data and infrastructure
-
-PostgreSQL
-
-Prisma
-
-pgvector
-
-Redis
-
-BullMQ
-
-Amazon S3 or Cloudflare R2
-
-MinIO for local object storage
-
-Integrations planned
-
-Resend
-
-Firebase Cloud Messaging
-
-Semaphore or another approved SMS provider
-
-Tesseract.js
-
-OpenAI API
-
-Testing and monitoring
-
-Jest
-
-Supertest
-
-Playwright
-
-Sentry
-
-Repository Structure
-
+```text
 cityconnect/
 ├── apps/
-│   ├── web/
-│   ├── api/
-│   └── worker/
+│   ├── web/                  Next.js citizen, employee, admin, and public UI
+│   ├── api/                  NestJS REST API and WebSocket gateway
+│   └── worker/               NestJS BullMQ background processors
+│
 ├── packages/
-│   ├── database/
-│   ├── shared-types/
-│   ├── validation/
-│   ├── config/
-│   ├── eslint-config/
-│   └── typescript-config/
-├── infrastructure/
-├── docs/
-├── .github/
-├── docker-compose.yml
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-├── turbo.json
-├── AGENT.md
-├── CONTRIBUTING.md
-└── README.md
+│   ├── database/             Prisma schema, migrations, generated client, seeds
+│   ├── shared-types/         Shared TypeScript types
+│   ├── validation/           Shared validation schemas
+│   ├── config/               Shared non-secret configuration
+│   ├── eslint-config/        Shared ESLint configuration
+│   └── typescript-config/    Shared TypeScript configuration
+│
+├── infrastructure/           Docker, deployment, monitoring, and scripts
+├── docs/                     Requirements, diagrams, API, security, and testing docs
+├── .github/                  Workflows, issue templates, and PR templates
+│
+├── AGENT.md                  Instructions and context for future AI agents
+├── CONTRIBUTING.md           Team contribution guide
+├── README.md                 Project documentation
+├── docker-compose.yml        Local infrastructure services
+├── package.json              Root workspace scripts
+├── pnpm-workspace.yaml       pnpm workspace configuration
+└── turbo.json                Turborepo configuration
+```
 
-Prerequisites
+## Getting Started
 
-Install the following before starting:
+### Prerequisites
 
-Node.js 22 or a compatible project-approved version
+Install the following:
 
-pnpm 11
+- Node.js 22 or the project-approved version
+- pnpm 11
+- Git
+- PostgreSQL
+- Docker Desktop
+- An Auth0 development tenant
 
-Git
+Verify the installations:
 
-PostgreSQL 18 or a compatible PostgreSQL instance
-
-Docker Desktop for Redis and MinIO when using the provided Compose setup
-
-An Auth0 development tenant
-
-Verify your tools:
-
+```powershell
 node --version
 pnpm --version
 git --version
 psql --version
 docker --version
+```
 
-Installation
+### Clone the Repository
 
-Clone the repository:
-
+```powershell
 git clone https://github.com/YOUR-ORGANIZATION/cityconnect.git
 cd cityconnect
+```
 
-Install all workspace dependencies from the repository root:
+### Install Dependencies
 
+Run installation from the repository root:
+
+```powershell
 pnpm install
+```
 
-Do not run separate package managers inside individual applications. The repository uses one root pnpm workspace and one root lockfile.
+Only one root `pnpm-lock.yaml` and one root `pnpm-workspace.yaml` should exist.
 
-Environment Configuration
+## Environment Variables
 
-Never commit real .env files.
+Never commit real credentials or local `.env` files.
 
-Create local environment files based on the included examples.
-
-Database
-
-Create:
-
-packages/database/.env
-
-Example:
-
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/cityconnect"
-
-Next.js and Auth0
+### Web Application
 
 Create:
 
+```text
 apps/web/.env.local
+```
 
-Example:
-
+```env
 AUTH0_SECRET=
 APP_BASE_URL=http://localhost:3000
 AUTH0_DOMAIN=
 AUTH0_CLIENT_ID=
 AUTH0_CLIENT_SECRET=
 AUTH0_AUDIENCE=https://api.cityconnect.local
+```
 
-API and worker
+### Database Package
 
-Create local .env files for apps/api and apps/worker when those applications require their integrations.
+Create:
 
-PostgreSQL and Prisma Setup
+```text
+packages/database/.env
+```
 
-Create the local database:
+```env
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/cityconnect"
+```
 
+### API
+
+Create:
+
+```text
+apps/api/.env
+```
+
+```env
+NODE_ENV=development
+API_PORT=4000
+WEB_URL=http://localhost:3000
+DATABASE_URL=
+AUTH0_DOMAIN=
+AUTH0_AUDIENCE=https://api.cityconnect.local
+REDIS_URL=redis://localhost:6379
+```
+
+## Database Setup
+
+Create the database:
+
+```sql
 CREATE DATABASE cityconnect;
-
-The expected local connection is:
-
-Host: localhost
-Port: 5432
-Database: cityconnect
-User: postgres
+```
 
 Validate the Prisma schema:
 
+```powershell
 pnpm --filter @cityconnect/database exec prisma validate
+```
 
-Create and apply a migration:
+Create and apply the initial migration:
 
+```powershell
 pnpm --filter @cityconnect/database exec prisma migrate dev --name initial_schema
+```
 
-Generate the Prisma client:
+Generate Prisma Client:
 
+```powershell
 pnpm --filter @cityconnect/database exec prisma generate
+```
 
 Open Prisma Studio:
 
+```powershell
 pnpm --filter @cityconnect/database exec prisma studio
+```
 
-Do not edit the _prisma_migrations table manually.
+Do not manually edit the `_prisma_migrations` table.
 
-Local Infrastructure
+## Available Commands
 
-When Docker Desktop is installed and running, start the configured local services:
+Run these commands from the repository root.
 
-docker compose up -d
+| Command | Purpose |
+|---|---|
+| `pnpm dev` | Run available development applications through Turborepo |
+| `pnpm build` | Build all applications and packages |
+| `pnpm lint` | Run linting |
+| `pnpm typecheck` | Run TypeScript checks |
+| `pnpm test` | Run tests |
+| `pnpm format` | Format supported files with Prettier |
+| `pnpm --filter web dev` | Run the Next.js frontend |
+| `pnpm --filter api start:dev` | Run the NestJS API |
+| `pnpm --filter worker start:dev` | Run the background worker |
+| `pnpm --filter @cityconnect/database exec prisma studio` | Open Prisma Studio |
 
-Check their status:
+## Development Workflow
 
-docker compose ps
+1. Select or create a GitHub issue.
+2. Assign the issue to the active sprint.
+3. Create a branch from `develop`.
+4. Implement and test the change.
+5. Commit using Conventional Commits.
+6. Push the branch.
+7. Open a pull request into `develop`.
+8. Complete review and testing before merging.
 
-When PostgreSQL is installed directly on Windows and already uses port 5432, do not start a second PostgreSQL container on the same port. Redis and MinIO may still be run through Docker.
+Example:
 
-Running the Applications
-
-Run all available workspace development scripts:
-
-pnpm dev
-
-Run only the frontend:
-
-pnpm --filter web dev
-
-Run only the NestJS API:
-
-pnpm --filter api start:dev
-
-Run only the worker:
-
-pnpm --filter worker start:dev
-
-Expected local URLs:
-
-Frontend: http://localhost:3000
-API: http://localhost:4000
-Swagger: http://localhost:4000/api/docs
-MinIO console: http://localhost:9001
-
-Auth0 Development Setup
-
-Create two Auth0 resources.
-
-CityConnect Web
-
-Application type: Regular Web Application
-
-Allowed callback URL: http://localhost:3000/auth/callback
-
-Allowed logout URL: http://localhost:3000
-
-Allowed web origin: http://localhost:3000
-
-CityConnect API
-
-Identifier: https://api.cityconnect.local
-
-Signing algorithm: RS256
-
-Auth0 manages identity and login. CityConnect PostgreSQL roles and permissions manage authorization.
-
-Common Commands
-
-pnpm install
-pnpm dev
-pnpm build
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm format
-
-Database commands:
-
-pnpm --filter @cityconnect/database exec prisma validate
-pnpm --filter @cityconnect/database exec prisma migrate dev --name migration_name
-pnpm --filter @cityconnect/database exec prisma generate
-pnpm --filter @cityconnect/database exec prisma studio
-
-Branching
-
-Permanent branches:
-
-main
-
-develop
-
-Create work branches from develop:
-
+```powershell
 git checkout develop
 git pull origin develop
-git checkout -b feature/example-feature
+git checkout -b feature/service-request-submission
+```
 
-Open pull requests into develop. Do not push feature work directly to main.
+```powershell
+git add .
+git commit -m "feat(requests): add citizen request submission"
+git push -u origin feature/service-request-submission
+```
 
-Initial Delivery Plan
+## Project Status
 
-Sprint 0 — Foundation
+CityConnect is currently in the **foundation and early development phase**.
 
-Monorepo and workspace
+Current priorities:
 
-Next.js frontend
+- [x] Create the monorepo
+- [x] Initialize the Next.js frontend
+- [x] Configure PostgreSQL and Prisma
+- [ ] Complete Auth0 authentication flow
+- [ ] Initialize the NestJS API
+- [ ] Initialize the NestJS worker
+- [ ] Configure Redis and BullMQ
+- [ ] Configure local object storage
+- [ ] Build the first complete service-request workflow
 
-NestJS API
+The first functional vertical slice is:
 
-NestJS worker
+```text
+Citizen signs in
+→ Citizen submits a service request
+→ Request is stored in PostgreSQL
+→ Employee receives the request
+→ Employee updates the request status
+→ Citizen sees the updated status
+→ Notification is queued
+→ Audit log is recorded
+```
 
-PostgreSQL and Prisma
+## Contributing
 
-Auth0 development setup
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before creating branches, issues, commits, or pull requests.
 
-Redis and local storage
+AI coding agents must also read [AGENT.md](AGENT.md) before changing the project.
 
-Project board and documentation
+## License
 
-Sprint 1 — Authentication and Users
-
-Auth0 frontend authentication
-
-NestJS JWKS validation
-
-Internal user synchronization
-
-Roles and permissions
-
-/api/v1/users/me
-
-Authentication audit logs
-
-Sprint 2 — Service Request MVP
-
-Citizen request submission
-
-Request categories
-
-Employee assignment
-
-Status history
-
-Citizen request tracking
-
-Notifications and audit logs
-
-Security Principles
-
-Never commit credentials or private keys.
-
-Never store Auth0 passwords in PostgreSQL.
-
-Enforce authorization in the backend.
-
-Validate all request bodies, parameters, files, and external data.
-
-Use least privilege.
-
-Audit sensitive workflow and administrative actions.
-
-Avoid logging tokens, private documents, or unnecessary personal information.
-
-Contributing
-
-Read CONTRIBUTING.md before creating branches, commits, issues, or pull requests.
-
-AI coding agents must also read AGENT.md before modifying the project.
-
-Project Status
-
-CityConnect is currently in the foundation and authentication setup stage. The immediate technical objective is to complete Auth0 authentication, NestJS access-token validation, PostgreSQL user synchronization, and role-based authorization.
+This project is licensed under the terms in [LICENSE](LICENSE).
