@@ -1,33 +1,28 @@
-import { LoginButton } from "@/components/auth/login-button";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { auth0 } from "@/lib/auth0";
+import Link from "next/link"
 
-export default async function HomePage() {
-  const session = await auth0.getSession();
-
+export default function UnauthorizedPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <section className="space-y-6 text-center">
-        <div>
-          <h1 className="text-4xl font-bold">CityConnect</h1>
-          <p className="mt-2 text-muted-foreground">
-            Citizen services and local government management platform
-          </p>
-        </div>
+    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
+      <section className="w-full max-w-lg rounded-3xl border bg-white p-10 text-center shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-widest text-orange-600">
+          Access denied
+        </p>
 
-        {session ? (
-          <div className="space-y-4">
-            <p>
-              Logged in as{" "}
-              <strong>{session.user.name ?? session.user.email}</strong>
-            </p>
+        <h1 className="mt-3 text-3xl font-bold text-slate-900">
+          You are not authorized
+        </h1>
 
-            <LogoutButton />
-          </div>
-        ) : (
-          <LoginButton />
-        )}
+        <p className="mt-4 leading-7 text-slate-600">
+          Your account does not have permission to access this page.
+        </p>
+
+        <Link
+          href="/"
+          className="mt-8 inline-flex rounded-xl bg-green-700 px-5 py-3 font-medium text-white transition hover:bg-green-800"
+        >
+          Return to homepage
+        </Link>
       </section>
     </main>
-  );
+  )
 }
