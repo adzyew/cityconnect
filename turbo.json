@@ -1,17 +1,13 @@
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://turborepo.com/schema.json",
   "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**"
-      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -19,14 +15,10 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
-    },
-    "test:e2e": {
+    "db:generate": {
       "cache": false
     },
-    "format": {
+    "db:migrate": {
       "cache": false
     }
   }
