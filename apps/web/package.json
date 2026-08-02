@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No frontend tests configured yet\""
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.25.0",

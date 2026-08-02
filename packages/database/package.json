@@ -19,7 +19,8 @@
     "migrate:reset": "prisma migrate reset",
     "studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No database tests configured yet.\""
   },
   "dependencies": {
     "@prisma/client": "^7.9.0",
