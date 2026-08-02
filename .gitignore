@@ -75,8 +75,11 @@ web_modules/
 .parcel-cache
 
 # Next.js build output
-.next
+.next/
+dist/
+build/
 out
+
 
 # Nuxt.js build / generate output
 .nuxt
@@ -141,3 +144,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Turborepo cache
+.turbo/
+**/.turbo/

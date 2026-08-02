@@ -11,12 +11,20 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CITIZEN
+  EMPLOYEE
+  DEPARTMENT_ADMINISTRATOR
+  SYSTEM_ADMINISTRATOR
+}
+
 model User {
   id          String   @id @default(uuid()) @db.Uuid
   auth0UserId String   @unique
   email       String   @unique
   firstName   String?
   lastName    String?
+  role        Role     @default(CITIZEN)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
